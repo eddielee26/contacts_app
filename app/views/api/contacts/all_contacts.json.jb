@@ -1,0 +1,23 @@
+# json = []
+# @contacts.each do |contact|
+#   contact_hash = {
+#     id: contact.id,
+#     first_name: contact.first_name,
+#     last_name: contact.last_name,
+#     email: contact.email,
+#     phone_number: contact.phone_number
+#   }
+#   json << contact_hash
+# end
+
+# json # implicit return statement in ruby
+
+@contacts.map do |contact|
+  {
+    id: contact.id,
+    first_name: contact.first_name,
+    last_name: contact.last_name,
+    email: contact.email,
+    phone_number: contact.phone_number
+  }
+end
