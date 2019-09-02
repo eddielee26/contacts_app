@@ -43,7 +43,8 @@ class Api::ContactsController < ApplicationController
 
   def destroy
     contact = Contact.find_by(id: params[:id])
-    
+    contact.destroy
+    render json: {message: "Contact Destroyed"}
   end
 
 end
