@@ -2,6 +2,11 @@ class Api::ContactsController < ApplicationController
 
   def index
     @contacts = Contact.all
+    if params[:search]
+      @contacts = @contacts.where("first_name iLIKE ? OR middle_name iLIKE ? OR last_name iLIKE ? OR bio iLIKE ? OR email iLIKE ? OR phone_number iLIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
+    end
+
+    @contacts = @contacts.order(:id)
     render 'index.json.jb'
   end
 
@@ -11,6 +16,9 @@ class Api::ContactsController < ApplicationController
   end
 
   def create
+    # address = "1441 W Carmen Avem Chicago, IL"
+    # coordinates - Geocoder.coordinates(params[:address])
+
     @contact = Contact.create(
       id: params[:id],
       first_name: params[:first_name],
@@ -18,7 +26,9 @@ class Api::ContactsController < ApplicationController
       last_name: params[:last_name],
       bio: params[:bio],
       email: params[:email],
-      phone_number: params[:phone_number].to_i
+      phone_number: params[:phone_number],
+      # latitude: coordinates[0],
+      # longitude: coordinates[1]
     )
     if @contact.save
       render 'show.json.jb'
@@ -29,6 +39,9 @@ class Api::ContactsController < ApplicationController
 
   def update
     @contact = Contact.find_by(id: params[:id])
+
+    # coordinates = Geocoder.coordinates(params[:address])
+    
     @contact.id = params[:id] || @contact.id
     @contact.first_name = params[:first_name] || @contact.first_name
     @contact.middle_name = params[:middle_name] || @contact.middle_name
@@ -36,6 +49,8 @@ class Api::ContactsController < ApplicationController
     @contact.bio = params[:bio] || @contact.bio
     @contact.email = params[:email] || @contact.email
     @contact.phone_number = params[:phone_number] || @contact.phone_number
+    # @contact.latitude = coordinates[0] || @contact.latitude
+    # @contact.longitude = coordinates[1] || @contact.longitude
     @contact.save
     if @contact.save
       render 'show.json.jb'

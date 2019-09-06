@@ -7,6 +7,8 @@
   bio: contact.bio,
   email: contact.email,
   phone_number: contact.phone_number,
+  # latitude: contact.latitude,
+  # longitude: contact.longitude,
   formatted: {
     updated_at: contact.friendly_updated_at,
     japan_phone_number: contact.japan_phone_number
