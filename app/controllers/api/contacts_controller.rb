@@ -1,13 +1,24 @@
 class Api::ContactsController < ApplicationController
 
   def index
-    @contacts = Contact.all
-    if params[:search]
-      @contacts = @contacts.where("first_name iLIKE ? OR middle_name iLIKE ? OR last_name iLIKE ? OR bio iLIKE ? OR email iLIKE ? OR phone_number iLIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
-    end
+    # if current_user
+    #   @contacts = current_user.contacts
 
-    @contacts = @contacts.order(:id)
-    render 'index.json.jb'
+      @contacts = Contact.all
+      if params[:search]
+        @contacts = @contacts.where("first_name iLIKE ? OR middle_name iLIKE ? OR last_name iLIKE ? OR bio iLIKE ? OR email iLIKE ? OR phone_number iLIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
+      end
+
+      # if params[:group]
+      #   group = Group.find_by(name: params[:group])
+      #   @contacts = group.contacts.where(user_id: current_user.id)
+      # end
+
+      @contacts = @contacts.order(:id)
+      render 'index.json.jb'
+    # else
+    #   render json: []
+    # end
   end
 
   def show
@@ -28,7 +39,8 @@ class Api::ContactsController < ApplicationController
       email: params[:email],
       phone_number: params[:phone_number],
       # latitude: coordinates[0],
-      # longitude: coordinates[1]
+      # longitude: coordinates[1],
+      user_id: current_user.id
     )
     if @contact.save
       render 'show.json.jb'
